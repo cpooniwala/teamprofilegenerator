@@ -1,14 +1,26 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
+const Employee = require("./lib/employee");
+const Manager = require("./lib/manager");
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
+const teamArr = [];
 
 const employeeRole = {
   type: "list",
   name: "role",
   message: "What employee type are you creating?",
-  choices: ["Employee", "Manager", "Engineer", "Intern"]
+  choices: ["Employee", "Manager", "Engineer", "Intern", "Done"]
 };
 
-const employee = [
+const restartInput = {
+  type: "list",
+  name: "restart",
+  message: "Would you like to add another employee?",
+  choices: ["Yes", "No"]
+};
+
+const employeeInput = [
   {
     type: "input",
     name: "name",
@@ -16,12 +28,22 @@ const employee = [
   },
   {
     type: "input",
-    name: "name",
+    name: "id",
     message: "What is your id?"
+  },
+  {
+    type: "input",
+    name: "title",
+    message: "What is your title?"
+  },
+  {
+    type: "input",
+    name: "email",
+    message: "What is your email?"
   }
 ];
 
-const manager = [
+const managerInput = [
   {
     type: "input",
     name: "name",
@@ -29,17 +51,27 @@ const manager = [
   },
   {
     type: "input",
-    name: "name",
+    name: "id",
     message: "What is your id?"
   },
   {
     type: "input",
-    name: "name",
+    name: "title",
+    message: "What is your title?"
+  },
+  {
+    type: "input",
+    name: "email",
+    message: "What is your email?"
+  },
+  {
+    type: "input",
+    name: "officenumber",
     message: "What is your office number?"
   }
 ];
 
-const engineer = [
+const engineerInput = [
   {
     type: "input",
     name: "name",
@@ -47,8 +79,13 @@ const engineer = [
   },
   {
     type: "input",
-    name: "name",
+    name: "id",
     message: "What is your id?"
+  },
+  {
+    type: "input",
+    name: "email",
+    message: "What is your email?"
   },
   {
     type: "input",
@@ -57,7 +94,7 @@ const engineer = [
   }
 ];
 
-const intern = [
+const internInput = [
   {
     type: "input",
     name: "name",
@@ -67,6 +104,11 @@ const intern = [
     type: "input",
     name: "name",
     message: "What is your id?"
+  },
+  {
+    type: "input",
+    name: "email",
+    message: "What is your email?"
   },
   {
     type: "input",
@@ -76,17 +118,87 @@ const intern = [
 ];
 
 function init() {
+  managerQuestions();
+}
+
+function questions() {
   inquirer.prompt(employeeRole).then(employeeRole => {
-    console.log(employeeRole.role);
+    //console.log(employeeRole.role);
     if (employeeRole.role === "Employee") {
-      inquirer.prompt(employee);
+      inquirer.prompt(employeeInput).then(answers => {
+        employee = new Employee(
+          answers.name,
+          answers.id,
+          answers.title,
+          answers.email,
+          employeeRole.role
+        );
+        console.log(employee);
+        teamArr.push(employee);
+        questions();
+      });
     } else if (employeeRole.role === "Manager") {
-      inquirer.prompt(manager);
+      inquirer.prompt(managerInput).then(answers => {
+        console.log(answers.name);
+        manager = new Manager(
+          answers.name,
+          answers.id,
+          answers.title,
+          answers.email,
+          answers.officeNumber,
+          employeeRole.role
+        );
+        //console.log(manager);
+        teamArr.push(manager);
+        questions();
+      });
     } else if (employeeRole.role === "Engineer") {
-      inquirer.prompt(engineer);
-    } else {
-      inquirer.prompt(intern);
+      inquirer.prompt(engineerInput).then(answers => {
+        engineer = new Engineer(
+          answers.name,
+          answers.id,
+          answers.title,
+          answers.email,
+          answers.github,
+          employeeRole.role
+        );
+        //console.log(engineer);
+        teamArr.push(engineer);
+        questions();
+      });
+    } else if (employeeRole.role === "Intern") {
+      inquirer.prompt(internInput).then(answers => {
+        intern = new Intern(
+          answers.name,
+          answers.id,
+          answers.title,
+          answers.email,
+          answers.school,
+          employeeRole.role
+        );
+        //console.log(intern);
+        teamArr.push(intern);
+        questions();
+      });
+    } else if (employeeRole.role === "Done") {
+      console.log("End application");
+      console.log(teamArr);
     }
+  });
+}
+
+function managerQuestions() {
+  inquirer.prompt(managerInput).then(answers => {
+    manager = new Manager(
+      answers.name,
+      answers.id,
+      answers.title,
+      answers.email,
+      answers.officeNumber,
+      employeeRole.role
+    );
+    teamArr.push(manager);
+    questions();
   });
 }
 
