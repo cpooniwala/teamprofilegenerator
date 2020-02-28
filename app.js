@@ -13,18 +13,11 @@ const employeeRole = {
   choices: ["Employee", "Manager", "Engineer", "Intern", "Done"]
 };
 
-const restartInput = {
-  type: "list",
-  name: "restart",
-  message: "Would you like to add another employee?",
-  choices: ["Yes", "No"]
-};
-
 const employeeInput = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the Employee's name?"
   },
   {
     type: "input",
@@ -47,7 +40,7 @@ const managerInput = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the Manager's name?"
   },
   {
     type: "input",
@@ -66,7 +59,7 @@ const managerInput = [
   },
   {
     type: "input",
-    name: "officenumber",
+    name: "officeNumber",
     message: "What is your office number?"
   }
 ];
@@ -75,12 +68,17 @@ const engineerInput = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the Engineer's name?"
   },
   {
     type: "input",
     name: "id",
     message: "What is your id?"
+  },
+  {
+    type: "input",
+    name: "title",
+    message: "What is your title?"
   },
   {
     type: "input",
@@ -98,12 +96,17 @@ const internInput = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the Intern's name?"
   },
   {
     type: "input",
-    name: "name",
+    name: "id",
     message: "What is your id?"
+  },
+  {
+    type: "input",
+    name: "title",
+    message: "What is your title?"
   },
   {
     type: "input",
@@ -145,8 +148,8 @@ function questions() {
           answers.id,
           answers.title,
           answers.email,
-          answers.officeNumber,
-          employeeRole.role
+          employeeRole.role,
+          answers.officeNumber
         );
         //console.log(manager);
         teamArr.push(manager);
@@ -159,8 +162,8 @@ function questions() {
           answers.id,
           answers.title,
           answers.email,
-          answers.github,
-          employeeRole.role
+          employeeRole.role,
+          answers.github
         );
         //console.log(engineer);
         teamArr.push(engineer);
@@ -173,10 +176,10 @@ function questions() {
           answers.id,
           answers.title,
           answers.email,
-          answers.school,
-          employeeRole.role
+          employeeRole.role,
+          answers.school
         );
-        //console.log(intern);
+        console.log(intern);
         teamArr.push(intern);
         questions();
       });
@@ -194,12 +197,17 @@ function managerQuestions() {
       answers.id,
       answers.title,
       answers.email,
-      answers.officeNumber,
-      employeeRole.role
+      employeeRole.role,
+      answers.officeNumber
     );
+    console.log(manager);
     teamArr.push(manager);
     questions();
   });
 }
 
 init();
+
+module.exports = teamArr;
+
+function generateHTML(teamArr) {}
