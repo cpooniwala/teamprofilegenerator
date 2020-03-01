@@ -1,11 +1,12 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
-const Employee = require("./lib/employee");
-const Manager = require("./lib/manager");
-const Engineer = require("./lib/engineer");
-const Intern = require("./lib/intern");
+const Employee = require("./lib/Employee");
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const render = require("./generatehtml");
 const teamArr = [];
-
+const outputPath = "./output/main.html";
 const employeeRole = {
   type: "list",
   name: "role",
@@ -126,7 +127,6 @@ function init() {
 
 function questions() {
   inquirer.prompt(employeeRole).then(employeeRole => {
-    //console.log(employeeRole.role);
     if (employeeRole.role === "Employee") {
       inquirer.prompt(employeeInput).then(answers => {
         employee = new Employee(
@@ -142,7 +142,6 @@ function questions() {
       });
     } else if (employeeRole.role === "Manager") {
       inquirer.prompt(managerInput).then(answers => {
-        console.log(answers.name);
         manager = new Manager(
           answers.name,
           answers.id,
@@ -179,13 +178,13 @@ function questions() {
           employeeRole.role,
           answers.school
         );
-        console.log(intern);
+        console.log(answers.school);
         teamArr.push(intern);
         questions();
       });
     } else if (employeeRole.role === "Done") {
       console.log("End application");
-      console.log(teamArr);
+      generateHTML(teamArr);
     }
   });
 }
@@ -200,7 +199,6 @@ function managerQuestions() {
       employeeRole.role,
       answers.officeNumber
     );
-    console.log(manager);
     teamArr.push(manager);
     questions();
   });
@@ -208,6 +206,7 @@ function managerQuestions() {
 
 init();
 
-module.exports = teamArr;
-
-function generateHTML(teamArr) {}
+function generateHTML(teamArr) {
+  //Create a render method that I call here with writefilesync
+  fs.writeFileSync(outputPath, render(teamArr), "utf-8");
+}
